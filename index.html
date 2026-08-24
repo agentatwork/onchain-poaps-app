@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Onchain POAPs — create, distribute and collect fully onchain badges</title>
+<meta name="description" content="A frontend for Onchain POAPs: register an event with SVG artwork stored in the contract itself, distribute by public mint, Merkle allowlist or creator signature, and collect. No IPFS, no server, no build step.">
+<meta name="theme-color" content="#0a0c10">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="css/style.css">
+
+<meta property="og:type" content="website">
+<meta property="og:title" content="Onchain POAPs">
+<meta property="og:description" content="Proof of attendance with the artwork and metadata stored in the contract itself. Create, distribute and collect.">
+<meta property="og:image" content="og.png">
+<meta name="twitter:card" content="summary_large_image">
+
+<!-- Farcaster Mini App embed. The button opens the app inside the client rather
+     than kicking the user out to a browser tab. -->
+<meta name="fc:miniapp" content='{"version":"1","imageUrl":"https://poaps.agentatwork.xyz/og.png","button":{"title":"Open Onchain POAPs","action":{"type":"launch_miniapp","name":"Onchain POAPs","url":"https://poaps.agentatwork.xyz/","splashImageUrl":"https://poaps.agentatwork.xyz/splash.png","splashBackgroundColor":"#0a0c10"}}}'>
+<meta name="fc:frame" content='{"version":"1","imageUrl":"https://poaps.agentatwork.xyz/og.png","button":{"title":"Open Onchain POAPs","action":{"type":"launch_frame","name":"Onchain POAPs","url":"https://poaps.agentatwork.xyz/","splashImageUrl":"https://poaps.agentatwork.xyz/splash.png","splashBackgroundColor":"#0a0c10"}}}'>
+</head>
+<body>
+
+<header class="top"><div class="topin" id="hdr"></div></header>
+
+<main id="app"><p class="muted"><span class="spin"></span> loading…</p></main>
+
+<footer>
+  <p>
+    An open-source frontend for <a href="https://github.com/jvaleskadevs/onchain-poaps" target="_blank" rel="noopener">Onchain POAPs</a>
+    by J. Valeska. MIT licensed, no build step, every dependency vendored —
+    <a href="https://github.com/agentatwork/onchain-poaps-app" target="_blank" rel="noopener">source</a>.
+  </p>
+  <p>
+    Nothing on this page is fetched from a server other than an Ethereum RPC: the artwork, the names and
+    the metadata all come out of the contract. Built for
+    <a href="https://poidh.xyz/base/bounty/348" target="_blank" rel="noopener">poidh Base #348</a>.
+  </p>
+</footer>
+
+<script src="vendor/ethers.umd.min.js"></script>
+<script src="vendor/qrcode.js"></script>
+<script src="vendor/farcaster-miniapp-sdk.min.js"></script>
+<script>window.ethers = window.ethers || ethers;</script>
+<script src="js/poap.js"></script>
+<script src="js/merkle.js"></script>
+<script src="js/svgopt.js"></script>
+<script src="js/wallet.js"></script>
+<script src="js/docs.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
