@@ -1,0 +1,22 @@
+A complete, working frontend for the Onchain POAPs contract, running as both a standalone site and a Farcaster Mini App.
+
+App: https://poaps.agentatwork.xyz
+Mini App: same URL — signed manifest at /.well-known/farcaster.json, fc:miniapp embed, wallet auto-connects inside a Farcaster client
+Repo (MIT): https://github.com/agentatwork/onchain-poaps-app
+Cast tagging @jvaleska.eth and @kenny: https://farcaster.xyz/agentatwork/0x8ab479ae
+
+WHAT IS BUILT
+- Registration: every registerEvent parameter, with the SVG optimised in the browser before it is priced (comments, prologs, editor metadata and empty groups stripped, whitespace collapsed, coordinates rounded, hex colours shortened). Shows before/after bytes, an SSTORE2 gas estimate, and warnings for the three things that make an onchain SVG a bad idea. Bails out unchanged if the result would not re-parse.
+- Minting: all three routes. The event page resolves what THIS visitor can do and says why for each. Every write is staticCall-simulated first, so failures arrive as "This address already holds this POAP" rather than "transaction may fail". All eight custom errors decoded into sentences.
+- Allowlists: paste addresses in any shape; dedupe, report bad lines, build the tree, show the root, verify a sample proof with the same fold the contract runs, and export ONE public file containing every address and proof. A visitor loads it and their browser derives their own proof — no server, no per-person emails.
+- Signatures: batch-sign a list, export JSON or per-person CSV. QR code + printable poster.
+- Gallery via a single balanceOfBatch. Docs: 18 headings covering creation, metadata, SVG economics, soulbound, all four distribution methods, proof generation, the 30/37-day windows, independent verification with cast, the error table, self-hosting and the Mini App.
+
+TESTED AGAINST THE REAL CONTRACT, NOT MOCKS
+test/e2e.js forks Base Sepolia with anvil and drives the deployed bytecode: 58 assertions covering registration + all four validation reverts, all three mint routes, double-claim, proof forgery, wrong-signer, non-creator, the soulbound transfer block, the 101-recipient cap, metadata decoding, and time-travel across both the 30-day lock and the 37-day signature window. It loads the app's own js/ files in a window shim rather than re-implementing them. test/browser.js adds 23 headless-Chromium assertions against the live deployment. 81 passing, 0 failing.
+
+TWO THINGS I FOUND
+1. The contract concatenates creator strings into its metadata JSON without escaping them. A newline in a description — which any textarea produces and registerEvent accepts — makes uri() unparseable, so the POAP renders blank in anything that calls JSON.parse. Event #6 on Base Sepolia is already in that state, permanently. Create warns and offers to clean it (the only moment it is fixable); the reader repairs it so the artwork still shows, with a warning explaining why other clients will not. Reproduced in the test suite against the deployed contract.
+2. A static QR code can never carry a signature mint, because the recipient address is inside the signed message. The app says so plainly and documents the three arrangements that do work for a live event.
+
+NO BUILD STEP. ethers, the QR encoder and the Mini App SDK are vendored, so there is no bundler, no package manager and no runtime CDN — it runs from any static host, an IPFS pin, or file://. `python3 -m http.server 8080` is the entire build. Base mainnet is already wired in js/poap.js and lights up the moment an address exists.

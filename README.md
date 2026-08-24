@@ -105,6 +105,11 @@ This app handles it at both ends:
 a newline in the description, confirms the resulting `uri()` does not parse, and confirms the
 repair path recovers it.
 
+Reported upstream as [onchain-poaps#1](https://github.com/jvaleskadevs/onchain-poaps/issues/1), and
+fixed there in [PR #2](https://github.com/jvaleskadevs/onchain-poaps/pull/2) — `_escapeJSON()`
+applied on the read side so it repairs every already-registered event including #6, plus six
+regression tests with a 256-run fuzz. A workaround in one frontend does not help anybody else's.
+
 ### Gallery
 Every POAP the connected address holds, drawn from the onchain SVG, fetched with a single
 `balanceOfBatch` rather than N calls.
